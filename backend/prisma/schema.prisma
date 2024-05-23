@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// schema.prisma
 
 datasource db {
   provider = "sqlite"
@@ -11,4 +7,33 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+}
+
+model Client {
+  clientId Int      @id @default(autoincrement())
+  cpf      String   @unique
+  nome     String
+  email    String
+  celular  String
+  orders   Order[]  // Relacionamento com os pedidos do cliente
+}
+
+model Order {
+  orderId      Int           @id @default(autoincrement())
+  nome         String
+  valor        Float
+  qtd          Int
+  clientId     Int           // Chave estrangeira para o modelo Client
+  client       Client        @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
+  installments Installment[] // Relacionamento com as parcelas do pedido
+}
+
+model Installment {
+  installmentId   Int          @id @default(autoincrement())
+  numero          Int
+  valor           Float
+  dataVencimento  DateTime
+  status          String
+  orderId         Int          // Chave estrangeira para o modelo Order
+  order           Order        @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
 }
