@@ -11,29 +11,29 @@ generator client {
 
 model Client {
   clientId Int      @id @default(autoincrement())
-  cpf      String   @unique
-  nome     String
-  email    String
-  celular  String
-  orders   Order[]  // Relacionamento com os pedidos do cliente
+  cpf       String   @unique
+  name      String
+  email     String
+  cellPhone String
+  orders    Order[]  
 }
 
 model Order {
   orderId      Int           @id @default(autoincrement())
-  nome         String
-  valor        Float
-  qtd          Int
-  clientId     Int           // Chave estrangeira para o modelo Client
+  name         String
+  value        Float
+  amount       Int
+  clientId     Int           
   client       Client        @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
-  installments Installment[] // Relacionamento com as parcelas do pedido
+  installments Installment[] 
 }
 
 model Installment {
   installmentId   Int          @id @default(autoincrement())
-  numero          Int
-  valor           Float
-  dataVencimento  DateTime
+  number          Int
+  amount          Float
+  dueDate         DateTime
   status          String
-  orderId         Int          // Chave estrangeira para o modelo Order
+  orderId         Int          
   order           Order        @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
 }
