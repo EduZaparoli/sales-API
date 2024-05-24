@@ -12,7 +12,6 @@ CREATE TABLE "Order" (
     "orderId" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "value" REAL NOT NULL,
-    "amount" INTEGER NOT NULL,
     "clientId" INTEGER NOT NULL,
     CONSTRAINT "Order_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client" ("clientId") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -21,7 +20,7 @@ CREATE TABLE "Order" (
 CREATE TABLE "Installment" (
     "installmentId" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "number" INTEGER NOT NULL,
-    "amount" REAL NOT NULL,
+    "value" REAL NOT NULL,
     "dueDate" DATETIME NOT NULL,
     "status" TEXT NOT NULL,
     "orderId" INTEGER NOT NULL,
