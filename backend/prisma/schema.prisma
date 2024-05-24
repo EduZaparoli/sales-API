@@ -22,7 +22,6 @@ model Order {
   orderId      Int           @id @default(autoincrement())
   name         String
   value        Float
-  amount       Int
   clientId     Int           
   client       Client        @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
   installments Installment[] 
@@ -31,7 +30,7 @@ model Order {
 model Installment {
   installmentId   Int          @id @default(autoincrement())
   number          Int
-  amount          Float
+  value           Float
   dueDate         DateTime
   status          String
   orderId         Int          
