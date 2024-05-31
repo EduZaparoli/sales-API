@@ -8,29 +8,47 @@ datasource db {
 }
 
 model Client {
-  clientId  Int     @id @default(autoincrement())
-  cpf       String  @unique
-  name      String
-  email     String
-  cellPhone String
-  orders    Order[]
+  id             Int        @id @default(autoincrement())
+  documentNumber String     @unique
+  name           String
+  email          String
+  cellPhone      String
+  purchases      Purchase[]
 }
 
-model Order {
-  orderId      Int           @id @default(autoincrement())
-  name         String
-  value        Float
+model Purchase {
+  id           Int               @id @default(autoincrement())
   clientId     Int
+  purchaseDate DateTime          @default(now())
+  totalValue   Float
   installments Installment[]
-  client       Client        @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
+  client       Client            @relation(fields: [clientId], references: [id])
+  products     PurchaseProduct[]
+}
+
+model Product {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  purchases   PurchaseProduct[]
+}
+
+model PurchaseProduct {
+  id         Int      @id @default(autoincrement())
+  purchaseId Int
+  productId  Int
+  amount     Int
+  product    Product  @relation(fields: [productId], references: [id])
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
 }
 
 model Installment {
-  installmentId Int      @id @default(autoincrement())
-  number        Int
-  value         Float
-  dueDate       DateTime
-  status        String
-  orderId       Int
-  order         Order    @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  id                Int       @id @default(autoincrement())
+  purchaseId        Int
+  installmentNumber Int
+  installmentValue  Float
+  dueDate           DateTime
+  paymentDate       DateTime?
+  purchase          Purchase  @relation(fields: [purchaseId], references: [id])
 }

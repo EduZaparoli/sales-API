@@ -5,18 +5,39 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class ClientService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async findByDocumentNumber(cpf: string) {
+	async findByDocumentNumber(documentNumber: string) {
 		return await this.prisma.client.findUnique({
 			where: {
-				cpf,
+				documentNumber,
 			},
 		});
 	}
 
-	async findOne(clientId: number) {
+	async findOne(id: number) {
 		return await this.prisma.client.findUnique({
 			where: {
-				clientId,
+				id,
+			},
+		});
+	}
+
+	async findPurchaseById(id: number) {
+		return this.prisma.purchase.findUnique({
+			where: { id },
+			include: { installments: true, client: true },
+		});
+	}
+
+	async findAllPurchases() {
+		return this.prisma.purchase.findMany({
+			include: {
+				installments: true,
+				client: true,
+				products: {
+					include: {
+						product: true,
+					},
+				},
 			},
 		});
 	}
