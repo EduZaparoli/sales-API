@@ -41,4 +41,10 @@ export class ClientService {
 			},
 		});
 	}
+
+	async findPurchaseInstallments(purchaseId: number) {
+		return this.prisma.installment.findMany({
+			where: { purchaseId },
+		});
+	}
 }
