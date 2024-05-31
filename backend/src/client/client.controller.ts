@@ -24,4 +24,9 @@ export class ClientController {
 	async getAllPurchases() {
 		return this.clientService.findAllPurchases();
 	}
+
+	@Get("purchase/:id/installments")
+	async getPurchaseInstallments(@Param("id") id: string) {
+		return this.clientService.findPurchaseInstallments(+id);
+	}
 }
