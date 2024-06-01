@@ -28,16 +28,36 @@ export class ClientService {
 		});
 	}
 
-	async findAllPurchases() {
+	async findAllPurchases(documentNumber: string) {
 		return this.prisma.purchase.findMany({
+			where: {
+				client: {
+					documentNumber: documentNumber,
+				},
+			},
 			include: {
-				installments: true,
-				client: true,
 				products: {
 					include: {
 						product: true,
 					},
 				},
+			},
+		});
+	}
+
+	async findInstallmentsByProduct(productId: number) {
+		return this.prisma.installment.findMany({
+			where: {
+				purchase: {
+					products: {
+						some: {
+							productId: productId,
+						},
+					},
+				},
+			},
+			include: {
+				purchase: true,
 			},
 		});
 	}
