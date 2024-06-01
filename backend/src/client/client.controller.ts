@@ -10,6 +10,15 @@ export class ClientController {
 		return this.clientService.findByDocumentNumber(documentNumber);
 	}
 
+	@Get(":productId/installments")
+	async getInstallmentsByProduct(@Param("productId") productId: string) {
+		const id = parseInt(productId, 10);
+		if (isNaN(id)) {
+			throw new Error("Invalid product ID");
+		}
+		return this.clientService.findInstallmentsByProduct(id);
+	}
+
 	@Get(":id")
 	findOne(@Param("id") id: string) {
 		return this.clientService.findOne(+id);
@@ -20,9 +29,9 @@ export class ClientController {
 		return this.clientService.findPurchaseById(+id);
 	}
 
-	@Get("purchases/all")
-	async getAllPurchases() {
-		return this.clientService.findAllPurchases();
+	@Get(":documentNumber/purchases/all")
+	async getAllPurchases(@Param("documentNumber") documentNumber: string) {
+		return this.clientService.findAllPurchases(documentNumber);
 	}
 
 	@Get("purchase/:id/installments")
