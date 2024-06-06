@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Put } from "@nestjs/common";
 import { ClientService } from "./client.service";
 
 @Controller("client")
@@ -6,8 +6,12 @@ export class ClientController {
 	constructor(private readonly clientService: ClientService) {}
 
 	@Put("updateInstallments/:purchaseId")
-	updateInstallments(@Param("purchaseId") purchaseId: number, @Body() status: string) {
-		return this.clientService.updateInstallments(purchaseId, status);
+	async updateInstallments(
+		@Param("purchaseId", ParseIntPipe) purchaseId: number,
+		@Body() body: { installmentNumbers: number[]; status: string },
+	) {
+		const { installmentNumbers, status } = body;
+		return this.clientService.updateInstallments(purchaseId, installmentNumbers, status);
 	}
 
 	@Get("documentNumber/:documentNumber")

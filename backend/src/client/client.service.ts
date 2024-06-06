@@ -5,9 +5,14 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class ClientService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async updateInstallments(purchaseId: number, status: string) {
-		return this.prisma.installment.update({
-			where: { id: purchaseId },
+	async updateInstallments(purchaseId: number, installmentNumbers: number[], status: string) {
+		return this.prisma.installment.updateMany({
+			where: {
+				purchaseId: purchaseId,
+				installmentNumber: {
+					in: installmentNumbers,
+				},
+			},
 			data: {
 				status: status,
 			},
