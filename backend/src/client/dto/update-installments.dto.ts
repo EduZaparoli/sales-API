@@ -5,5 +5,6 @@ export class UpdateInstallmentsDto {
 		installmentValue: number;
 		dueDate: string;
 		paymentDate?: string;
+		status?: string;
 	}[];
 }
