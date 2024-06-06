@@ -50,5 +50,6 @@ model Installment {
   installmentValue  Float
   dueDate           DateTime
   paymentDate       DateTime?
+  status            String
   purchase          Purchase  @relation(fields: [purchaseId], references: [id])
 }
