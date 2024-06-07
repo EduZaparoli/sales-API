@@ -24,6 +24,9 @@ export class ClientService {
 			where: {
 				documentNumber,
 			},
+			include: {
+				address: true,
+			},
 		});
 	}
 
