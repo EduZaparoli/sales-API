@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Put } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Put } from "@nestjs/common";
 import { ClientService } from "./client.service";
 
 @Controller("client")
@@ -15,8 +15,15 @@ export class ClientController {
 	}
 
 	@Get("documentNumber/:documentNumber")
-	findByDocumentNumber(@Param("documentNumber") documentNumber: string) {
-		return this.clientService.findByDocumentNumber(documentNumber);
+	async findByDocumentNumber(@Param("documentNumber") documentNumber: string) {
+		try {
+			return await this.clientService.findByDocumentNumber(documentNumber);
+		} catch (error) {
+			if (error.status === HttpStatus.NOT_FOUND) {
+				throw new HttpException("Client not found", HttpStatus.NOT_FOUND);
+			}
+			throw error;
+		}
 	}
 
 	@Get(":productId/installments")
