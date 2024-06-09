@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
@@ -20,7 +20,7 @@ export class ClientService {
 	}
 
 	async findByDocumentNumber(documentNumber: string) {
-		return await this.prisma.client.findUnique({
+		const client = await this.prisma.client.findUnique({
 			where: {
 				documentNumber,
 			},
@@ -28,6 +28,10 @@ export class ClientService {
 				address: true,
 			},
 		});
+		if (!client) {
+			throw new HttpException("Client not found", HttpStatus.NOT_FOUND);
+		}
+		return client;
 	}
 
 	async findOne(id: number) {
